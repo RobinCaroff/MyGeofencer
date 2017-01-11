@@ -11,6 +11,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -36,6 +37,9 @@ public class InternalStorageMyGeofencesRepository implements MyGeofencesReposito
 
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
         List<MyGeofence> geofences = gson.fromJson(jsonFeed, new TypeToken<List<MyGeofence>>(){}.getType());
+        if(geofences == null) {
+            geofences = new ArrayList<>();
+        }
         return geofences;
     }
 

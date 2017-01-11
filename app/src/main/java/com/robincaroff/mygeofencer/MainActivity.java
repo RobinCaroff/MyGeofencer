@@ -4,16 +4,26 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Places;
+import com.robincaroff.mygeofencer.adapters.MyGeofencesAdapter;
+import com.robincaroff.mygeofencer.models.MyGeofence;
+import com.robincaroff.mygeofencer.repositories.MyGeofencesRepositoryProtocol;
+
+import java.util.List;
+
+import javax.inject.Inject;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
@@ -24,14 +34,24 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
      */
     protected GoogleApiClient googleApiClient;
 
+    @Inject MyGeofencesRepositoryProtocol myGeofencesRepository;
+
+    private RecyclerView recyclerView;
+    private TextView noGeofenceMessage;
+    private MyGeofencesAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ((MyGeofencerApplication) getApplication()).getMyGeofenceRepositoryComponent().inject(this);
+        List<MyGeofence> geofences = myGeofencesRepository.getGeofences();
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-       FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -40,6 +60,18 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         });
 
         buildGoogleApiClient();
+
+        noGeofenceMessage = (TextView) findViewById(R.id.no_geofence_message);
+
+        recyclerView = (RecyclerView) findViewById(R.id.geofences_recycler_view);
+        recyclerView.setHasFixedSize(true);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(layoutManager);
+        adapter = new MyGeofencesAdapter(geofences);
+        recyclerView.setAdapter(adapter);
+
+        recyclerView.setVisibility(adapter.getItemCount() > 0 ? View.VISIBLE : View.INVISIBLE);
+        noGeofenceMessage.setVisibility(adapter.getItemCount() > 0 ? View.INVISIBLE : View.VISIBLE);
     }
 
     @Override

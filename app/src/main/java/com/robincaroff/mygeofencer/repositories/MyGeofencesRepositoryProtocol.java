@@ -8,7 +8,6 @@ import java.util.List;
  * Defines Geofence repository protocol
  */
 
-
 public interface MyGeofencesRepositoryProtocol {
     List<MyGeofence> getGeofences();
     void saveGeofence(MyGeofence geofence);

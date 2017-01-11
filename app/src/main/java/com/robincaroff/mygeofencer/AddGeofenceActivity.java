@@ -13,6 +13,10 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
+import com.robincaroff.mygeofencer.models.MyGeofence;
+import com.robincaroff.mygeofencer.repositories.MyGeofencesRepositoryProtocol;
+
+import javax.inject.Inject;
 
 /**
  * Activity used to add a location
@@ -28,10 +32,14 @@ public class AddGeofenceActivity extends AppCompatActivity {
     private EditText title;
     private Button addButton;
 
+    @Inject MyGeofencesRepositoryProtocol myGeofencesRepository;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_geofence);
+
+        ((MyGeofencerApplication) getApplication()).getMyGeofenceRepositoryComponent().inject(this);
 
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
         try {
@@ -47,7 +55,9 @@ public class AddGeofenceActivity extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                MyGeofence geofence = new MyGeofence(location, title.getText().toString());
+                myGeofencesRepository.saveGeofence(geofence);
+                finish();
             }
         });
     }
@@ -61,5 +71,22 @@ public class AddGeofenceActivity extends AppCompatActivity {
                 location = place.getLatLng();
             }
         }
+    }
+
+    private MyGeofence createMyGeofence() {
+        MyGeofence geofence = null;
+
+        if(location != null) {
+            String name = title.getText().toString();
+            if(name != null && !name.isEmpty()) {
+                geofence = new MyGeofence(location, name);
+            } else {
+                Toast.makeText(this, getString(R.string.name_error), Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, getString(R.string.location_error), Toast.LENGTH_SHORT).show();
+        }
+
+        return geofence;
     }
 }

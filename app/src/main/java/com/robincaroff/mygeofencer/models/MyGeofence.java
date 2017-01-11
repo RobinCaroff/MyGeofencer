@@ -10,4 +10,17 @@ import com.google.android.gms.maps.model.LatLng;
 public class MyGeofence {
     private LatLng location;
     private String name;
+
+    public MyGeofence(LatLng location, String name) {
+        this.location = location;
+        this.name = name;
+    }
+
+    public LatLng getLocation() {
+        return location;
+    }
+
+    public String getName() {
+        return name;
+    }
 }

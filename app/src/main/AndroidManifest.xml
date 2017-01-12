@@ -33,6 +33,8 @@
         <activity android:name=".activities.AddGeofenceActivity"/>
 
         <activity android:name=".activities.EditGeofenceActivity"/>
+
+        <service android:name=".services.GeofenceTransitionsIntentService"/>
     </application>
 
 </manifest>

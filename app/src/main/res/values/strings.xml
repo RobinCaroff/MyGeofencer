@@ -6,4 +6,6 @@
     <string name="location_error">Location not provided.</string>
     <string name="name_error">You must provide a suitable name for the geofence.</string>
     <string name="no_geofence">No geofence to display.</string>
+    <string name="monitor_geofence">Monitor geofence</string>
+    <string name="action_delete">Delete</string>
 </resources>

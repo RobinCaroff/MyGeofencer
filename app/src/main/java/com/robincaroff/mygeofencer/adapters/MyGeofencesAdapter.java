@@ -19,9 +19,11 @@ import java.util.List;
 public class MyGeofencesAdapter extends RecyclerView.Adapter<MyGeofencesAdapter.ViewHolder> {
 
     private List<MyGeofence> dataset;
+    private MyGeofencesAdapterDelegate delegate;
 
-    public MyGeofencesAdapter(List<MyGeofence> dataset) {
+    public MyGeofencesAdapter(List<MyGeofence> dataset, MyGeofencesAdapterDelegate delegate) {
         this.dataset = dataset;
+        this.delegate = delegate;
     }
 
     @Override
@@ -30,7 +32,7 @@ public class MyGeofencesAdapter extends RecyclerView.Adapter<MyGeofencesAdapter.
         View v = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.mygeofence_recylcyerview_item, parent, false);
 
-        ViewHolder vh = new ViewHolder(v);
+        ViewHolder vh = new ViewHolder(v, delegate);
         return vh;
     }
 
@@ -38,7 +40,7 @@ public class MyGeofencesAdapter extends RecyclerView.Adapter<MyGeofencesAdapter.
     public void onBindViewHolder(ViewHolder holder, int position) {
         MyGeofence geofence = dataset.get(position);
 
-        holder.name.setText(geofence.getName().toString());
+        holder.getName().setText(geofence.getName().toString());
     }
 
     @Override
@@ -48,14 +50,33 @@ public class MyGeofencesAdapter extends RecyclerView.Adapter<MyGeofencesAdapter.
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public View mRootView;
-        public TextView name;
+        private View rootView;
+        private TextView name;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, final MyGeofencesAdapterDelegate delegate) {
             super(itemView);
-            mRootView = itemView;
+            rootView = itemView;
 
             name = (TextView) itemView.findViewById(R.id.name);
+
+            rootView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    delegate.itemClicked(getAdapterPosition());
+                }
+            });
         }
+
+        public TextView getName() {
+            return name;
+        }
+    }
+
+    public List<MyGeofence> getDataset() {
+        return dataset;
+    }
+
+    public interface MyGeofencesAdapterDelegate {
+        void itemClicked(int position);
     }
 }

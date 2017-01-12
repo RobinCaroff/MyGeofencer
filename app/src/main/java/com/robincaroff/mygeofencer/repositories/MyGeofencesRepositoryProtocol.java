@@ -9,6 +9,7 @@ import java.util.List;
  */
 
 public interface MyGeofencesRepositoryProtocol {
+    void deleteGeofence(MyGeofence geofence);
     List<MyGeofence> getGeofences();
     void saveGeofence(MyGeofence geofence);
 }

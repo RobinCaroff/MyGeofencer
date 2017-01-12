@@ -1,4 +1,4 @@
-package com.robincaroff.mygeofencer;
+package com.robincaroff.mygeofencer.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,8 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -17,6 +15,8 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.places.Places;
+import com.robincaroff.mygeofencer.MyGeofencerApplication;
+import com.robincaroff.mygeofencer.R;
 import com.robincaroff.mygeofencer.adapters.MyGeofencesAdapter;
 import com.robincaroff.mygeofencer.models.MyGeofence;
 import com.robincaroff.mygeofencer.repositories.MyGeofencesRepositoryProtocol;
@@ -25,7 +25,9 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+import static com.robincaroff.mygeofencer.Constants.MYGEOFENCE_EXTRA;
+
+public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, MyGeofencesAdapter.MyGeofencesAdapterDelegate {
 
     protected static final String TAG = MainActivity.class.getSimpleName();
 
@@ -45,7 +47,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         super.onCreate(savedInstanceState);
 
         ((MyGeofencerApplication) getApplication()).getMyGeofenceRepositoryComponent().inject(this);
-        List<MyGeofence> geofences = myGeofencesRepository.getGeofences();
 
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -67,17 +68,24 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new MyGeofencesAdapter(geofences);
-        recyclerView.setAdapter(adapter);
-
-        recyclerView.setVisibility(adapter.getItemCount() > 0 ? View.VISIBLE : View.INVISIBLE);
-        noGeofenceMessage.setVisibility(adapter.getItemCount() > 0 ? View.INVISIBLE : View.VISIBLE);
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         googleApiClient.connect();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        List<MyGeofence> geofences = myGeofencesRepository.getGeofences();
+        adapter = new MyGeofencesAdapter(geofences, this);
+        recyclerView.setAdapter(adapter);
+
+        recyclerView.setVisibility(adapter.getItemCount() > 0 ? View.VISIBLE : View.INVISIBLE);
+        noGeofenceMessage.setVisibility(adapter.getItemCount() > 0 ? View.INVISIBLE : View.VISIBLE);
     }
 
     @Override
@@ -106,28 +114,6 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
                 .build();
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     /**
      * Runs when a GoogleApiClient object successfully connects.
      */
@@ -149,5 +135,13 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         Log.i(TAG, "Connection suspended");
 
         // onConnected() will be called again automatically when the service reconnects
+    }
+
+    @Override
+    public void itemClicked(int position) {
+        MyGeofence geofence = adapter.getDataset().get(position);
+        Intent intent = new Intent(this, EditGeofenceActivity.class);
+        intent.putExtra(MYGEOFENCE_EXTRA, geofence);
+        startActivity(intent);
     }
 }

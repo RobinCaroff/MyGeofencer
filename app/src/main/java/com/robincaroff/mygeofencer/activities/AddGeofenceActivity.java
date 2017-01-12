@@ -1,4 +1,4 @@
-package com.robincaroff.mygeofencer;
+package com.robincaroff.mygeofencer.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,6 +13,8 @@ import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.maps.model.LatLng;
+import com.robincaroff.mygeofencer.MyGeofencerApplication;
+import com.robincaroff.mygeofencer.R;
 import com.robincaroff.mygeofencer.models.MyGeofence;
 import com.robincaroff.mygeofencer.repositories.MyGeofencesRepositoryProtocol;
 

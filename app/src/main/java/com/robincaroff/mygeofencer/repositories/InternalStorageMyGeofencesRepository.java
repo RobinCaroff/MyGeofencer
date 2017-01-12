@@ -1,6 +1,7 @@
 package com.robincaroff.mygeofencer.repositories;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -32,6 +33,25 @@ public class InternalStorageMyGeofencesRepository implements MyGeofencesReposito
     }
 
     @Override
+    public void deleteGeofence(MyGeofence geofence) {
+        List<MyGeofence> geofences = getGeofences();
+        int idx = -1;
+        for(int i = 0; i < geofences.size(); i++) {
+            if(geofences.get(i).equals(geofence)) {
+                idx = i;
+                break;
+            }
+        }
+        if(idx == -1) {
+            Log.e(InternalStorageMyGeofencesRepository.class.getSimpleName(), "Cannot remove unknown geofence: " + geofence.getName());
+            return;
+        }
+
+        geofences.remove(idx);
+        saveGeofencesList(geofences);
+    }
+
+    @Override
     public List<MyGeofence> getGeofences() {
         String jsonFeed = readFromInternalStorage();
 
@@ -47,10 +67,12 @@ public class InternalStorageMyGeofencesRepository implements MyGeofencesReposito
     public void saveGeofence(MyGeofence geofence) {
         List<MyGeofence> geofences = getGeofences();
         geofences.add(geofence);
+        saveGeofencesList(geofences);
+    }
 
+    private void saveGeofencesList(List<MyGeofence> geofences) {
         Gson gson = new Gson();
         String json = gson.toJson(geofences);
-
         writeToInternalStorage(json);
     }
 

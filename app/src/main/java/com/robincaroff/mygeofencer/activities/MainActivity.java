@@ -25,7 +25,7 @@ import java.util.List;
 
 import javax.inject.Inject;
 
-import static com.robincaroff.mygeofencer.Constants.MYGEOFENCE_EXTRA;
+import static com.robincaroff.mygeofencer.utils.Constants.MYGEOFENCE_EXTRA;
 
 public class MainActivity extends AppCompatActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, MyGeofencesAdapter.MyGeofencesAdapterDelegate {
 

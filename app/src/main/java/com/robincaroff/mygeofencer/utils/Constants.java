@@ -1,4 +1,4 @@
-package com.robincaroff.mygeofencer;
+package com.robincaroff.mygeofencer.utils;
 
 /**
  * Defines app constants

@@ -18,6 +18,8 @@ import com.robincaroff.mygeofencer.R;
 import com.robincaroff.mygeofencer.models.MyGeofence;
 import com.robincaroff.mygeofencer.repositories.MyGeofencesRepositoryProtocol;
 
+import java.util.UUID;
+
 import javax.inject.Inject;
 
 /**
@@ -57,8 +59,7 @@ public class AddGeofenceActivity extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MyGeofence geofence = new MyGeofence(location, title.getText().toString());
-                myGeofencesRepository.saveGeofence(geofence);
+                createMyGeofence();
                 finish();
             }
         });
@@ -81,7 +82,9 @@ public class AddGeofenceActivity extends AppCompatActivity {
         if(location != null) {
             String name = title.getText().toString();
             if(name != null && !name.isEmpty()) {
-                geofence = new MyGeofence(location, name);
+                String uuid = UUID.randomUUID().toString();
+                geofence = new MyGeofence(uuid, location, name);
+                myGeofencesRepository.saveGeofence(geofence);
             } else {
                 Toast.makeText(this, getString(R.string.name_error), Toast.LENGTH_SHORT).show();
             }

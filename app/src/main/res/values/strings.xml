@@ -9,6 +9,9 @@
     <string name="monitor_geofence">Monitor geofence</string>
     <string name="action_delete">Delete</string>
 
+    <string name="geofences_added">Geofences added</string>
+    <string name="geofences_removed">Geofences removed</string>
+
     <!-- Geofence error strings -->
     <string name="not_connected">GoogleApiClient no yet connected. Try again.</string>
     <string name="geofence_not_available">Geofence service is not available now</string>

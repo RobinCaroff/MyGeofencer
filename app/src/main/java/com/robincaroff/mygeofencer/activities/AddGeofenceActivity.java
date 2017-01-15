@@ -43,7 +43,7 @@ public class AddGeofenceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_geofence);
 
-        ((MyGeofencerApplication) getApplication()).getMyGeofenceRepositoryComponent().inject(this);
+        ((MyGeofencerApplication) getApplication()).getMyGeofencerComponent().inject(this);
 
         PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
         try {

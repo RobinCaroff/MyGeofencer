@@ -40,7 +40,7 @@ public class EditGeofenceActivity extends AppCompatActivity {
             finish();
         }
 
-        ((MyGeofencerApplication) getApplication()).getMyGeofenceRepositoryComponent().inject(this);
+        ((MyGeofencerApplication) getApplication()).getMyGeofencerComponent().inject(this);
 
         setContentView(R.layout.activity_edit_geofence);
         TextView name = (TextView) findViewById(R.id.name);

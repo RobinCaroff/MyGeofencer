@@ -9,7 +9,9 @@ public class Constants {
 
     public static final String PACKAGE_NAME = "com.robincaroff.mygeofencer";
 
-    public static String MYGEOFENCE_EXTRA = PACKAGE_NAME + ".MYGEOFENCE_EXTRA";
+    public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1234;
+
+    public static final String MYGEOFENCE_EXTRA = PACKAGE_NAME + ".MYGEOFENCE_EXTRA";
 
     public static final String SHARED_PREFERENCES_NAME = PACKAGE_NAME + ".SHARED_PREFERENCES_NAME";
 

@@ -106,7 +106,7 @@ public class GeofencingController implements GeofencingControllerProtocol, Googl
             mGeofenceList.add(new Geofence.Builder()
                     // Set the request ID of the geofence. This is a string to identify this
                     // geofence.
-                    .setRequestId(geofence.getUuid())
+                    .setRequestId(geofence.getName())
 
                     // Set the circular region of this geofence.
                     .setCircularRegion(
@@ -193,7 +193,7 @@ public class GeofencingController implements GeofencingControllerProtocol, Googl
 
             // Update the UI. Adding geofences enables the Remove Geofences button, and removing
             // geofences enables the Add Geofences button.
-            // TODO: Update UI to inform that geofences have benn added
+            // TODO: Update UI to inform that geofences have been added
 
             Toast.makeText(
                     context,
@@ -235,6 +235,11 @@ public class GeofencingController implements GeofencingControllerProtocol, Googl
     public void addGeofences() {
         if (!mGoogleApiClient.isConnected()) {
             Toast.makeText(context, context.getString(R.string.not_connected), Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        if(mGeofenceList.isEmpty()) {
+            Toast.makeText(context, context.getString(R.string.no_geofences_to_add), Toast.LENGTH_SHORT).show();
             return;
         }
 

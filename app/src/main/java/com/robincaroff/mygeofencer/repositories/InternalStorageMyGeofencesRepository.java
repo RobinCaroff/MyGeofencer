@@ -37,7 +37,7 @@ public class InternalStorageMyGeofencesRepository implements MyGeofencesReposito
         List<MyGeofence> geofences = getGeofences();
         int idx = -1;
         for(int i = 0; i < geofences.size(); i++) {
-            if(geofences.get(i).equals(geofence)) {
+            if(geofences.get(i).getUuid().equals(geofence.getUuid())) {
                 idx = i;
                 break;
             }

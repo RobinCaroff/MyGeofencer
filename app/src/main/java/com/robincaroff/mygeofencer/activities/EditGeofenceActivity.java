@@ -15,7 +15,7 @@ import com.robincaroff.mygeofencer.repositories.MyGeofencesRepositoryProtocol;
 
 import javax.inject.Inject;
 
-import static com.robincaroff.mygeofencer.Constants.MYGEOFENCE_EXTRA;
+import static com.robincaroff.mygeofencer.utils.Constants.MYGEOFENCE_EXTRA;
 
 /**
  * Activity used to edit a geofence
@@ -40,7 +40,7 @@ public class EditGeofenceActivity extends AppCompatActivity {
             finish();
         }
 
-        ((MyGeofencerApplication) getApplication()).getMyGeofenceRepositoryComponent().inject(this);
+        ((MyGeofencerApplication) getApplication()).getMyGeofencerComponent().inject(this);
 
         setContentView(R.layout.activity_edit_geofence);
         TextView name = (TextView) findViewById(R.id.name);

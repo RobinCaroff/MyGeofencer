@@ -2,10 +2,10 @@ package com.robincaroff.mygeofencer;
 
 import android.app.Application;
 
-
-import com.robincaroff.mygeofencer.dagger.components.DaggerMyGeofenceRepositoryComponent;
-import com.robincaroff.mygeofencer.dagger.components.MyGeofenceRepositoryComponent;
+import com.robincaroff.mygeofencer.dagger.components.DaggerMyGeofencerComponent;
+import com.robincaroff.mygeofencer.dagger.components.MyGeofencerComponent;
 import com.robincaroff.mygeofencer.dagger.modules.ContextModule;
+import com.robincaroff.mygeofencer.dagger.modules.GeofencingControllerModule;
 import com.robincaroff.mygeofencer.dagger.modules.MyGeofenceRepositoryModule;
 
 /**
@@ -16,7 +16,7 @@ import com.robincaroff.mygeofencer.dagger.modules.MyGeofenceRepositoryModule;
 public class MyGeofencerApplication extends Application {
     protected static Application application;
 
-    MyGeofenceRepositoryComponent myGeofenceRepositoryComponent;
+    private MyGeofencerComponent myGeofencerComponent;
 
     @Override
     public void onCreate() {
@@ -25,9 +25,10 @@ public class MyGeofencerApplication extends Application {
         application = this;
 
         // Dagger%COMPONENT_NAME%
-        myGeofenceRepositoryComponent = DaggerMyGeofenceRepositoryComponent.builder()
+        myGeofencerComponent = DaggerMyGeofencerComponent.builder()
                 .contextModule(new ContextModule(this))
                 .myGeofenceRepositoryModule(new MyGeofenceRepositoryModule())
+                .geofencingControllerModule(new GeofencingControllerModule())
                 .build();
     }
 
@@ -35,7 +36,7 @@ public class MyGeofencerApplication extends Application {
         return application;
     }
 
-    public MyGeofenceRepositoryComponent getMyGeofenceRepositoryComponent() {
-        return myGeofenceRepositoryComponent;
+    public MyGeofencerComponent getMyGeofencerComponent() {
+        return myGeofencerComponent;
     }
 }

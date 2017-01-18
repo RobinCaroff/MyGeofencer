@@ -17,6 +17,7 @@
 package com.robincaroff.mygeofencer.services;
 
 import android.app.IntentService;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -162,6 +163,8 @@ public class GeofenceTransitionsIntentService extends IntentService {
                 .setContentTitle(notificationDetails)
                 .setContentText(getString(R.string.geofence_transition_notification_text))
                 .setContentIntent(notificationPendingIntent);
+
+        builder.build().flags |= Notification.FLAG_AUTO_CANCEL;
 
         // Dismiss notification once the user touches it.
         builder.setAutoCancel(true);

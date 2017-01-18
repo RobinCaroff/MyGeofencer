@@ -38,6 +38,8 @@ import com.robincaroff.mygeofencer.utils.GeofenceErrorMessages;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.robincaroff.mygeofencer.utils.Constants.NOTIFICATION_EXTRA;
+
 /**
  * Listener for geofence transition changes.
  *
@@ -136,6 +138,7 @@ public class GeofenceTransitionsIntentService extends IntentService {
     private void sendNotification(String notificationDetails) {
         // Create an explicit content Intent that starts the main Activity.
         Intent notificationIntent = new Intent(getApplicationContext(), MainActivity.class);
+        notificationIntent.putExtra(NOTIFICATION_EXTRA, notificationDetails);
 
         // Construct a task stack.
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(this);

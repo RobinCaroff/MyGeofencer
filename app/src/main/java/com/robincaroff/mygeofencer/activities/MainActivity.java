@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -21,9 +22,13 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import static com.robincaroff.mygeofencer.utils.Constants.ADD_GEOFENCE_REQUEST;
 import static com.robincaroff.mygeofencer.utils.Constants.MYGEOFENCE_EXTRA;
+import static com.robincaroff.mygeofencer.utils.Constants.NOTIFICATION_EXTRA;
 
 public class MainActivity extends AppCompatActivity implements MyGeofencesAdapter.MyGeofencesAdapterDelegate {
+
+    private static String TAG = MainActivity.class.getSimpleName();
 
     @Inject MyGeofencesRepositoryProtocol myGeofencesRepository;
     @Inject GeofencingControllerProtocol geofencingController;
@@ -56,26 +61,21 @@ public class MainActivity extends AppCompatActivity implements MyGeofencesAdapte
         recyclerView.setHasFixedSize(true);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+
+        updateView();
+
+        // Check if opened from a notification
+        Intent intent = getIntent();
+        String notificationDetails = intent.getStringExtra(NOTIFICATION_EXTRA);
+        if(notificationDetails == null) {
+            updateGeofences();
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         geofencingController.connect();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        List<MyGeofence> geofences = myGeofencesRepository.getGeofences();
-        adapter = new MyGeofencesAdapter(geofences, this);
-        recyclerView.setAdapter(adapter);
-
-        recyclerView.setVisibility(adapter.getItemCount() > 0 ? View.VISIBLE : View.INVISIBLE);
-        noGeofenceMessage.setVisibility(adapter.getItemCount() > 0 ? View.INVISIBLE : View.VISIBLE);
-
-        geofencingController.updateGeofenceList(geofences);
     }
 
     @Override
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity implements MyGeofencesAdapte
 
     private void goToAddGeofenceActivity() {
         Intent intent = new Intent(this, AddGeofenceActivity.class);
-        startActivity(intent);
+        startActivityForResult(intent, ADD_GEOFENCE_REQUEST);
     }
 
     @Override
@@ -95,5 +95,33 @@ public class MainActivity extends AppCompatActivity implements MyGeofencesAdapte
         Intent intent = new Intent(this, EditGeofenceActivity.class);
         intent.putExtra(MYGEOFENCE_EXTRA, geofence);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode == RESULT_OK) {
+            if(requestCode == ADD_GEOFENCE_REQUEST) {
+                MyGeofence myGeofence = data.getParcelableExtra(MYGEOFENCE_EXTRA);
+                if(myGeofence != null) {
+                    updateGeofences();
+                } else {
+                    Log.e(TAG, "Could not get the created geofence result");
+                }
+            }
+        }
+    }
+
+    private void updateGeofences() {
+        updateView();
+        geofencingController.updateGeofenceList(myGeofencesRepository.getGeofences());
+    }
+
+    private void updateView() {
+        List<MyGeofence> geofences = myGeofencesRepository.getGeofences();
+        adapter = new MyGeofencesAdapter(geofences, this);
+        recyclerView.setAdapter(adapter);
+
+        recyclerView.setVisibility(adapter.getItemCount() > 0 ? View.VISIBLE : View.INVISIBLE);
+        noGeofenceMessage.setVisibility(adapter.getItemCount() > 0 ? View.INVISIBLE : View.VISIBLE);
     }
 }

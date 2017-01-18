@@ -22,6 +22,8 @@ import java.util.UUID;
 
 import javax.inject.Inject;
 
+import static com.robincaroff.mygeofencer.utils.Constants.MYGEOFENCE_EXTRA;
+
 /**
  * Activity used to add a location
  */
@@ -36,7 +38,8 @@ public class AddGeofenceActivity extends AppCompatActivity {
     private EditText title;
     private Button addButton;
 
-    @Inject MyGeofencesRepositoryProtocol myGeofencesRepository;
+    @Inject
+    MyGeofencesRepositoryProtocol myGeofencesRepository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,8 +62,10 @@ public class AddGeofenceActivity extends AppCompatActivity {
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createMyGeofence();
-                finish();
+                MyGeofence myGeofence = createMyGeofence();
+                if(myGeofence != null) {
+                    returnMyGeofenceResult(myGeofence);
+                }
             }
         });
     }
@@ -94,5 +99,12 @@ public class AddGeofenceActivity extends AppCompatActivity {
         }
 
         return geofence;
+    }
+
+    private void returnMyGeofenceResult(MyGeofence myGeofence) {
+        Intent result = new Intent();
+        result.putExtra(MYGEOFENCE_EXTRA, myGeofence);
+        setResult(RESULT_OK, result);
+        finish();
     }
 }

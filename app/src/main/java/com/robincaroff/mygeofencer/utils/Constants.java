@@ -11,6 +11,7 @@ public class Constants {
 
     public static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1234;
     public static final int ADD_GEOFENCE_REQUEST = 9001;
+    public static final int EDIT_GEOFENCE_REQUEST = 9002;
 
     public static final String MYGEOFENCE_EXTRA = PACKAGE_NAME + ".MYGEOFENCE_EXTRA";
     public static final String NOTIFICATION_EXTRA = PACKAGE_NAME + ".NOTIFICATION_EXTRA";

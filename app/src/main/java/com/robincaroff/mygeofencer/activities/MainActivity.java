@@ -23,6 +23,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import static com.robincaroff.mygeofencer.utils.Constants.ADD_GEOFENCE_REQUEST;
+import static com.robincaroff.mygeofencer.utils.Constants.EDIT_GEOFENCE_REQUEST;
 import static com.robincaroff.mygeofencer.utils.Constants.MYGEOFENCE_EXTRA;
 import static com.robincaroff.mygeofencer.utils.Constants.NOTIFICATION_EXTRA;
 
@@ -94,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements MyGeofencesAdapte
         MyGeofence geofence = adapter.getDataset().get(position);
         Intent intent = new Intent(this, EditGeofenceActivity.class);
         intent.putExtra(MYGEOFENCE_EXTRA, geofence);
-        startActivity(intent);
+        startActivityForResult(intent, EDIT_GEOFENCE_REQUEST);
     }
 
     @Override
@@ -107,6 +108,8 @@ public class MainActivity extends AppCompatActivity implements MyGeofencesAdapte
                 } else {
                     Log.e(TAG, "Could not get the created geofence result");
                 }
+            } else if(requestCode == EDIT_GEOFENCE_REQUEST) {
+                updateGeofences();
             }
         }
     }

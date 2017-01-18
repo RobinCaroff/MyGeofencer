@@ -67,6 +67,8 @@ public class EditGeofenceActivity extends AppCompatActivity {
 
     private void deleteGeofence() {
         myGeofencesRepository.deleteGeofence(myGeofence);
+        Intent result = new Intent();
+        setResult(RESULT_OK, result);
         finish();
     }
 }

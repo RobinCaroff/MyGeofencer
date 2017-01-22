@@ -3,6 +3,7 @@ package com.robincaroff.mygeofencer.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -26,6 +27,8 @@ public class EditGeofenceActivity extends AppCompatActivity {
 
     private MyGeofence myGeofence;
 
+    private Toolbar toolbar;
+
     @Inject
     MyGeofencesRepositoryProtocol myGeofencesRepository;
 
@@ -41,6 +44,9 @@ public class EditGeofenceActivity extends AppCompatActivity {
         }
 
         ((MyGeofencerApplication) getApplication()).getMyGeofencerComponent().inject(this);
+
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         setContentView(R.layout.activity_edit_geofence);
         TextView name = (TextView) findViewById(R.id.name);
@@ -59,6 +65,9 @@ public class EditGeofenceActivity extends AppCompatActivity {
 
         if (id == R.id.action_delete) {
             deleteGeofence();
+            return true;
+        } else if (item.getItemId() == android.R.id.home) {
+            super.onBackPressed();
             return true;
         }
 

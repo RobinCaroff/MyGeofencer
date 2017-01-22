@@ -12,6 +12,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -80,12 +82,9 @@ public class InternalStorageMyGeofencesRepository implements MyGeofencesReposito
         try {
             // Get the FileOutputStream object
             FileOutputStream output = context.openFileOutput(FILENAME, MODE_PRIVATE);
-
-            //Write inside it
-            output.write(textContent.getBytes());
-
-            //Don't forget to close it once you are done
-            output.close();
+            OutputStreamWriter osw = new OutputStreamWriter(output, "UTF-8");
+            osw.write(textContent);
+            osw.close();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -100,9 +99,11 @@ public class InternalStorageMyGeofencesRepository implements MyGeofencesReposito
             // Get the FileInputStream object
             FileInputStream input = context.openFileInput(FILENAME);
 
+            InputStreamReader isr = new InputStreamReader(input,"UTF-8");
+
             StringBuffer stringBuffer = new StringBuffer(); //Use a StringBuffer to create the string
             int characterValue;
-            while((characterValue = input.read()) != -1) { //Read characters one by one
+            while((characterValue = isr.read()) != -1) { //Read characters one by one
                 stringBuffer.append((char) characterValue);
             }
 

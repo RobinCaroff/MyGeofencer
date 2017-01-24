@@ -38,4 +38,5 @@
     <string name="location_permission_refused_title">Permission denied</string>
     <string name="location_permission_refused_message">You won\'t be able to use this app until you grant location access.</string>
     <string name="enabled">Enabled</string>
+    <string name="disabled">Disabled</string>
 </resources>

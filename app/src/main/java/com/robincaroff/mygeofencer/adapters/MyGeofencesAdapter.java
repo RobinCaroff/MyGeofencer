@@ -40,7 +40,8 @@ public class MyGeofencesAdapter extends RecyclerView.Adapter<MyGeofencesAdapter.
     public void onBindViewHolder(ViewHolder holder, int position) {
         MyGeofence geofence = dataset.get(position);
 
-        holder.getName().setText(geofence.getName().toString());
+        holder.getName().setText(geofence.getName());
+        holder.getEnabledStatus().setText(geofence.isEnabled() ? R.string.enabled : R.string.disabled);
     }
 
     @Override
@@ -52,12 +53,14 @@ public class MyGeofencesAdapter extends RecyclerView.Adapter<MyGeofencesAdapter.
 
         private View rootView;
         private TextView name;
+        private TextView enabledStatus;
 
         public ViewHolder(View itemView, final MyGeofencesAdapterDelegate delegate) {
             super(itemView);
             rootView = itemView;
 
             name = (TextView) itemView.findViewById(R.id.name);
+            enabledStatus = (TextView) itemView.findViewById(R.id.enabled_status);
 
             rootView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -69,6 +72,10 @@ public class MyGeofencesAdapter extends RecyclerView.Adapter<MyGeofencesAdapter.
 
         public TextView getName() {
             return name;
+        }
+
+        public TextView getEnabledStatus() {
+            return enabledStatus;
         }
     }
 

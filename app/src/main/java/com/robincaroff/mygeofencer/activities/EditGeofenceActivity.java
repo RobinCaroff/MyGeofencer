@@ -7,7 +7,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
+import android.widget.EditText;
+import android.widget.Switch;
 
 import com.robincaroff.mygeofencer.MyGeofencerApplication;
 import com.robincaroff.mygeofencer.R;
@@ -29,6 +30,9 @@ public class EditGeofenceActivity extends AppCompatActivity {
 
     private Toolbar toolbar;
 
+    private Switch monitorSwitch;
+    private EditText nameEditText;
+
     @Inject
     MyGeofencesRepositoryProtocol myGeofencesRepository;
 
@@ -49,8 +53,11 @@ public class EditGeofenceActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         setContentView(R.layout.activity_edit_geofence);
-        TextView name = (TextView) findViewById(R.id.name);
-        name.setText(myGeofence.getName());
+        nameEditText = (EditText) findViewById(R.id.name);
+        nameEditText.setText(myGeofence.getName());
+
+        monitorSwitch = (Switch) findViewById(R.id.monitor_switch);
+        monitorSwitch.setChecked(myGeofence.isEnabled());
     }
 
     @Override
@@ -67,11 +74,35 @@ public class EditGeofenceActivity extends AppCompatActivity {
             deleteGeofence();
             return true;
         } else if (item.getItemId() == android.R.id.home) {
-            super.onBackPressed();
+            onBackPressed();
             return true;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+        String newName = nameEditText.getText().toString();
+        if(newName == null || newName.isEmpty()) {
+            nameEditText.setHint(R.string.geofence_title_hint);
+            return;
+        }
+
+        if(!newName.equals(myGeofence.getName()) || monitorSwitch.isChecked() != myGeofence.isEnabled()) {
+            MyGeofence newGeofence = new MyGeofence(myGeofence.getUuid(),
+                    myGeofence.getLocation(),
+                    newName,
+                    monitorSwitch.isChecked());
+            myGeofencesRepository.updateGeofence(newGeofence);
+
+            Intent result = new Intent();
+            setResult(RESULT_OK, result);
+            finish();
+            return;
+        }
+
+        super.onBackPressed();
     }
 
     private void deleteGeofence() {

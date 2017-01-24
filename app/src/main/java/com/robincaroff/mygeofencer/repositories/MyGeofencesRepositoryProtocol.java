@@ -12,4 +12,5 @@ public interface MyGeofencesRepositoryProtocol {
     void deleteGeofence(MyGeofence geofence);
     List<MyGeofence> getGeofences();
     void saveGeofence(MyGeofence geofence);
+    void updateGeofence(MyGeofence geofence);
 }

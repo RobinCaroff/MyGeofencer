@@ -14,11 +14,20 @@ public class MyGeofence implements Parcelable {
     private String uuid;
     private LatLng location;
     private String name;
+    private boolean enabled;
 
-    public MyGeofence(String uuid, LatLng location, String name) {
-        this.uuid = uuid;
+    public MyGeofence(String uuid, LatLng location, String name, boolean enabled) {
+        this.uuid = uuid.trim();
         this.location = location;
         this.name = name;
+        this.enabled = enabled;
+    }
+
+    public MyGeofence(String uuid, LatLng location, String name) {
+        this.uuid = uuid.trim();
+        this.location = location;
+        this.name = name;
+        this.enabled = true;
     }
 
     public String getUuid() {
@@ -31,6 +40,10 @@ public class MyGeofence implements Parcelable {
 
     public String getName() {
         return name;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
     }
 
     @Override
@@ -49,6 +62,7 @@ public class MyGeofence implements Parcelable {
         uuid = in.readString();
         location = (LatLng) in.readValue(LatLng.class.getClassLoader());
         name = in.readString();
+        enabled = in.readByte() != 0x00;
     }
 
     @Override
@@ -61,6 +75,7 @@ public class MyGeofence implements Parcelable {
         dest.writeString(uuid);
         dest.writeValue(location);
         dest.writeString(name);
+        dest.writeByte((byte) (enabled ? 0x01 : 0x00));
     }
 
     @SuppressWarnings("unused")

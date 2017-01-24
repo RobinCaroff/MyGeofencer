@@ -103,29 +103,31 @@ public class GeofencingController implements GeofencingControllerProtocol, Googl
     public void updateGeofenceList(List<MyGeofence> geofences) {
         mGeofenceList.clear();
         for (MyGeofence geofence : geofences) {
-            mGeofenceList.add(new Geofence.Builder()
-                    // Set the request ID of the geofence. This is a string to identify this
-                    // geofence.
-                    .setRequestId(geofence.getName())
+            if(geofence.isEnabled()) {
+                mGeofenceList.add(new Geofence.Builder()
+                        // Set the request ID of the geofence. This is a string to identify this
+                        // geofence.
+                        .setRequestId(geofence.getName())
 
-                    // Set the circular region of this geofence.
-                    .setCircularRegion(
-                            geofence.getLocation().latitude,
-                            geofence.getLocation().longitude,
-                            Constants.GEOFENCE_RADIUS_IN_METERS
-                    )
+                        // Set the circular region of this geofence.
+                        .setCircularRegion(
+                                geofence.getLocation().latitude,
+                                geofence.getLocation().longitude,
+                                Constants.GEOFENCE_RADIUS_IN_METERS
+                        )
 
-                    // Set the expiration duration of the geofence. This geofence gets automatically
-                    // removed after this period of time.
-                    .setExpirationDuration(Constants.GEOFENCE_EXPIRATION_IN_MILLISECONDS)
+                        // Set the expiration duration of the geofence. This geofence gets automatically
+                        // removed after this period of time.
+                        .setExpirationDuration(Constants.GEOFENCE_EXPIRATION_IN_MILLISECONDS)
 
-                    // Set the transition types of interest. Alerts are only generated for these
-                    // transition. We track entry and exit transitions in this sample.
-                    .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
-                            Geofence.GEOFENCE_TRANSITION_EXIT)
+                        // Set the transition types of interest. Alerts are only generated for these
+                        // transition. We track entry and exit transitions in this sample.
+                        .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
+                                Geofence.GEOFENCE_TRANSITION_EXIT)
 
-                    // Create the geofence.
-                    .build());
+                        // Create the geofence.
+                        .build());
+            }
         }
 
         if(mGoogleApiClient.isConnected()) {

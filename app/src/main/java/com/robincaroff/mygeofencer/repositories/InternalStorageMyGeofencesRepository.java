@@ -72,6 +72,18 @@ public class InternalStorageMyGeofencesRepository implements MyGeofencesReposito
         saveGeofencesList(geofences);
     }
 
+    @Override
+    public void updateGeofence(MyGeofence geofence) {
+        List<MyGeofence> geofences = getGeofences();
+        for (int i = 0; i < geofences.size(); i++) {
+            MyGeofence storedGeofence = geofences.get(i);
+            if(storedGeofence.getUuid().equals(geofence.getUuid())) {
+                geofences.set(i, geofence);
+            }
+        }
+        saveGeofencesList(geofences);
+    }
+
     private void saveGeofencesList(List<MyGeofence> geofences) {
         Gson gson = new Gson();
         String json = gson.toJson(geofences);
@@ -98,9 +110,7 @@ public class InternalStorageMyGeofencesRepository implements MyGeofencesReposito
         try {
             // Get the FileInputStream object
             FileInputStream input = context.openFileInput(FILENAME);
-
             InputStreamReader isr = new InputStreamReader(input,"UTF-8");
-
             StringBuffer stringBuffer = new StringBuffer(); //Use a StringBuffer to create the string
             int characterValue;
             while((characterValue = isr.read()) != -1) { //Read characters one by one

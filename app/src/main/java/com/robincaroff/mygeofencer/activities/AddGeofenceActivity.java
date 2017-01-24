@@ -78,6 +78,8 @@ public class AddGeofenceActivity extends AppCompatActivity {
                 Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
                 location = place.getLatLng();
                 title.setText(place.getName());
+            } else {
+                finish();
             }
         }
     }

@@ -46,6 +46,8 @@ import static com.robincaroff.mygeofencer.utils.Constants.NOTIFICATION_EXTRA;
  * Receives geofence transition events from Location Services in the form of an Intent containing
  * the transition type and geofence id(s) that triggered the transition. Creates a notification
  * as the output.
+ *
+ * * Code adapted from Google's Geofencing example: https://github.com/googlesamples/android-play-location/tree/master/Geofencing
  */
 public class GeofenceTransitionsIntentService extends IntentService {
 

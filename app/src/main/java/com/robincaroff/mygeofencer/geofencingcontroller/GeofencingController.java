@@ -30,6 +30,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Implementation of the GeofencingControllerProtocol interface
+ * Code adapted from Google's Geofencing example: https://github.com/googlesamples/android-play-location/tree/master/Geofencing
  */
 
 

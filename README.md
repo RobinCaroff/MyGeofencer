@@ -1,6 +1,6 @@
 # My Geofencer
 
-Android app made to illustrate the geofencing talk presenter to during the first Android Nantes meetup (https://www.meetup.com/fr-FR/android_nantes/).
+Android app made to illustrate the geofencing talk presented to during the first Android Nantes meetup (https://www.meetup.com/fr-FR/android_nantes/).
 
 Code adapted from Google's Geofencing example: https://github.com/googlesamples/android-play-location/tree/master/Geofencing
 
@@ -18,10 +18,6 @@ In order to use the Google Play services's Place Picker, you need to add a file 
     <string name="maps_apikey">YOUR_API_KEY</string>
 </resources>
 ```
-
-## Contribution guidelines ##
-
-* Use the Git Flow scheme
 
 ## License
 
